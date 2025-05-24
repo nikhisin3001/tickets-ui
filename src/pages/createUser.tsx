@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {Ban} from "lucide-react";
+import {ENDPOINT} from "../contants";
 
 export default function CreateUser({ token }: { token: string }) {
     const [name, setName] = useState("");
@@ -16,7 +17,7 @@ export default function CreateUser({ token }: { token: string }) {
         setMessage(null);
 
         try {
-            const res = await fetch("http://localhost:8000/register", {
+            const res = await fetch(ENDPOINT+"register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
