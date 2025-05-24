@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {ArrowLeft, Calendar, Check, Clock, Edit, Trash2, User, X} from "lucide-react";
 import DeleteDialog from "./deleteTicket";
+import {ENDPOINT} from "../contants";
 
 interface Ticket {
   id: string;
@@ -12,7 +13,8 @@ interface Ticket {
   createdAt: string;
   createdBy: string;
   reporter: string;
-  severity: string
+  severity: string;
+  category: string;
 }
 
 function StatusBadge(props: { status: any }) {
@@ -58,7 +60,7 @@ export default function TicketDetail({ token }: { token: string }) {
     setDeleteError(null);
 
     // Call API to delete the ticket
-    fetch(`http://localhost:8000/tickets/${id}`, {
+    fetch(ENDPOINT+`tickets/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -111,7 +113,7 @@ export default function TicketDetail({ token }: { token: string }) {
 
   // Update API details
   const updateTicket = async () => {
-    const res = await fetch(`http://localhost:8000/tickets/${id}`, {
+    const res = await fetch(ENDPOINT+`tickets/${id}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -133,7 +135,7 @@ export default function TicketDetail({ token }: { token: string }) {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8000/tickets/${id}`, {
+    fetch(ENDPOINT+`tickets/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -266,6 +268,14 @@ export default function TicketDetail({ token }: { token: string }) {
                   Reporter
                 </div>
                 <div>{ticket.reporter}</div>
+              </div>
+
+              <div>
+                <div className="text-gray-500 flex items-center">
+                  <User className="h-4 w-4 mr-1" />
+                  Category
+                </div>
+                <div>{ticket.category}</div>
               </div>
             </div>
 

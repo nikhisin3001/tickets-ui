@@ -2,12 +2,15 @@ import React from "react";
 import { useEffect, useState } from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import { ChevronDown, ChevronUp, Search } from 'lucide-react';
+import {ENDPOINT} from "../contants";
 
 
 interface Ticket {
   id: string;
   title: string;
   status : string;
+  assignee : string;
+  created_at : string;
 }
 
 export default function TicketList({ token, setToken }: { token: string; setToken: (t: string | null) => void }) {
@@ -22,7 +25,7 @@ export default function TicketList({ token, setToken }: { token: string; setToke
 
 
     useEffect(() => {
-        fetch("http://localhost:8000/tickets", {
+        fetch(ENDPOINT+"tickets/", {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -92,16 +95,6 @@ export default function TicketList({ token, setToken }: { token: string; setToke
                 />
             </div>
 
-            {/*<div className="mb-4">*/}
-            {/*    <input*/}
-            {/*        type="text"*/}
-            {/*        placeholder="Search by title or ID..."*/}
-            {/*        className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200"*/}
-            {/*        value={query}*/}
-            {/*        onChange={e => setQuery(e.target.value)}*/}
-            {/*    />*/}
-            {/*</div>*/}
-
 
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
@@ -137,6 +130,22 @@ export default function TicketList({ token, setToken }: { token: string; setToke
                             onClick={() => handleSort('status')}
                         >
                             <div className="flex items-center">
+                                Assignee <SortIcon field="assignee" />
+                            </div>
+                        </th>
+                        <th
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer border-b border-gray-200"
+                            onClick={() => handleSort('status')}
+                        >
+                            <div className="flex items-center">
+                                Created Date
+                            </div>
+                        </th>
+                        <th
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer border-b border-gray-200"
+                            onClick={() => handleSort('status')}
+                        >
+                            <div className="flex items-center">
                                 Action
                             </div>
                         </th>
@@ -146,8 +155,17 @@ export default function TicketList({ token, setToken }: { token: string; setToke
                     {filtered.map(ticket => (
                         <tr key={ticket.id} className="hover:bg-blue-50">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-100">{ticket.id}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 border-r border-gray-100">{ticket.title}</td>
-                            <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">{ticket.status}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 border-r border-gray-100">{ticket.status}</td>
+                            <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">{ticket.title}</td>
+                            <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">{ticket.assignee}</td>
+                            <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">{new Date(ticket.created_at).toLocaleString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true
+                            })}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">
                                 <div className="flex justify-center space-x-2">
                                 <button
@@ -156,13 +174,6 @@ export default function TicketList({ token, setToken }: { token: string; setToke
                                 >
                                     View
                                 </button>
-                                {/*<button*/}
-                                {/*    onClick={() => setIsDeleteDialogOpen(true)}*/}
-                                {/*    className="inline-flex items-center px-3 py-1 border border-red-500 text-red-500 rounded-md hover:bg-red-50 transition-colors duration-150"*/}
-                                {/*    title="Delete ticket"*/}
-                                {/*>*/}
-                                {/*    <Trash2 className="h-4 w-4" />*/}
-                                {/*</button>*/}
                                     </div>
 
                             </td>

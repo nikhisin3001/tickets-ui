@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, X, AlertCircle, Tag, Calendar, Clock } from 'lucide-react';
+import {ENDPOINT} from "../contants";
 
 export default function EnhancedNewTicketForm({ token }) {
   const [title, setTitle] = useState("");
@@ -38,7 +39,7 @@ export default function EnhancedNewTicketForm({ token }) {
       console.log("Creating ticket with:", { title, description, category, severity });
 
       // This would be your actual fetch call:
-      const res = await fetch("http://localhost:8000/tickets/", {
+      const res = await fetch(ENDPOINT+"tickets/", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,7 +48,7 @@ export default function EnhancedNewTicketForm({ token }) {
         body: JSON.stringify({
           title,
           description,
-          // category,
+          category,
          severity
         })
       });
